@@ -1,61 +1,35 @@
-.window{
-    border: 1px solid black;
-    border-radius: 5px;
-    filter: drop-shadow(gray 0px 0px 15px);
+body {
+    margin: 0;
 }
-.window-header{
-    background-color: darkolivegreen;
-    border-radius: 4px 4px 0 0;
-}
-.window-content{
-    background-color: lawngreen;
-    border-radius: 0 0 4px 4px;
-}
-.task-bar{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3.125rem;
-    z-index: 99999;
-    background-color: springgreen;
-}
-.task-list{
-    margin:0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    list-style: none;
+
+.king {
     display: flex;
-    align-content: center;
+    height: 100vh;
 }
-.task{
-    margin: 0.25rem;
-}
-.task > button{
+
+.outside {
     height: 100%;
+    width: 20vw;
+    z-index: 10;
     background-color: lightgreen;
 }
-.task-select{
-    margin: 0.25rem;
-}
-.task-select > button{
+
+#container{
+    position: relative;
     height: 100%;
-    background-color: seagreen;
+    width: 100%;
+    cursor: none;
+    overflow: hidden;
+    margin: 0 auto;
 }
-.shell-task{
-    height: 100%;
-    width: 0.625rem;
+#cursor {
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    border-radius: 50%;
     position: absolute;
-    right: 0;
-}
-.shell-task > button{
-    height: 100%;
-    width: 0.625rem;
-    margin: 0;
-    padding: 0;
-    border: none;
-    border-left: 1px solid black;
+    pointer-events: none;
+    z-index: 999;
 }
 .shell{
     background-color: darkseagreen;
@@ -63,10 +37,14 @@
     grid-template-columns: repeat(auto-fill,minmax(5rem,5rem));
     grid-template-rows: repeat(auto-fill, minmax(5rem,5rem));
     grid-auto-flow: column;
+    height: 100%;
+    width: 100%;
+    margin : 0 auto;
 }
 .app-button>button{
     height: calc(100% - 1rem);
     width: 100%;
+    cursor: none;
 }
 .app-title{
     height: 1rem;
