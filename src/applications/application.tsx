@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useDrag} from 'react-use-gesture';
+import {toNumber} from "@/modules/typeModule.tsx";
 import styled from "styled-components";
 
 const Window = styled.article`
@@ -56,6 +57,7 @@ const WindowContent = styled.section`
     right : 0;
     bottom : 0;
     padding : 0 5px 5px 5px;
+    box-sizing: border-box;
     background-color: lawngreen;
     border-radius: 0 0 4px 4px;
 `;
@@ -63,6 +65,8 @@ const Shell = styled.article`
     height : 100%;
     width : 100%;
 `;
+
+
 const Application = (props:any) => {
   const windowProps:React.CSSProperties = {
     position : "absolute",
@@ -82,7 +86,6 @@ const Application = (props:any) => {
   const [isFirst, setIsFirst] = useState<boolean>(true);//첫 클릭 여부
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);//창 최대 여부
   const [isMinimized, setIsMinimized] = useState<boolean>(false);//창 최소화 여부
-
 
   useEffect(() => { //cursorVec 동기화
     setCursor(props.cursorVec);
@@ -158,9 +161,9 @@ const Application = (props:any) => {
     const [x, y] = props.mouseBeacon;
     const { left, top, width, height } = window;
 
-    const nearRight = x >= left + width - 10;
-    const nearLeft = x <= left + 10;
-    const nearBottom = y >= top + height - 10;
+    const nearRight = x >= toNumber(left) + toNumber(width) - 10;
+    const nearLeft = x <= toNumber(left) + 10;
+    const nearBottom = y >= toNumber(top) + toNumber(height) - 10;
 
     return [nearRight, nearLeft, nearBottom];
   }
@@ -174,16 +177,16 @@ const Application = (props:any) => {
     return ((nearRight && nearBottom) || (nearLeft && nearBottom) || nearBottom)
   }
   const leftCondition = () => { //창 위치 조건문
-    const [nearRight, nearLeft, nearBottom] = Corner();
+    const [, nearLeft, nearBottom] = Corner();
     return ((nearLeft && nearBottom) || nearLeft)
   }
   const widthLimit = (params:any) => { //가로 최소 크기 조건문
-    const [nearRight, nearLeft, nearBottom] = Corner();
+    const [nearRight, , ] = Corner();
     if (window.width as unknown as number >=props.appSetup.minWidth){
-      if (nearLeft && nearBottom || nearRight) {
-        return window.width + params.offset[0] - beforeSizeParams[0];
+      if (nearRight) {
+        return toNumber(window.width) + params.offset[0] - beforeSizeParams[0];
       }else{
-        return window.width as unknown as number - params.offset[0] + beforeSizeParams[0];
+        return toNumber(window.width) - params.offset[0] + beforeSizeParams[0];
       }
     }
     return props.appSetup.minWidth;
@@ -207,7 +210,7 @@ const Application = (props:any) => {
         display: undefined,
         position: window.position,
         height: heightCondition()?heightLimit(params):window.height,
-        width: widthCondition()?widthLimit(params):window.width,
+          width: widthCondition()?widthLimit(params):window.width,
         top: window.top,
         left: leftCondition()?leftLimit(params):window.left,
         zIndex: props.layer - 1,
