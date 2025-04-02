@@ -10,7 +10,7 @@ const History:RecoilState<TaskType[]> = atom({
   default: [] as any
 })
 
-const help:string = "html [tag] [attribute] [content]<br/>";
+const help:string = "html [tag] [attribute,attribute2,...] [content]<br/>";
 
 const Input = styled.input`
     background : none;

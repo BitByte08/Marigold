@@ -23,3 +23,5 @@ applications
     - atbt : string
     - start_ctnt : number
     - ctnt : string[] | string
+- 유의사항
+  - attribute가 많을 시 각 attribute를 *띄우지 않고* 쉼표로 구분합니다.
