@@ -1,15 +1,38 @@
 import {useEffect, useState} from "react";
 import {styled} from "styled-components";
-import {useQueue} from "@/modules/dataStructureModule.tsx";
+import {useRecoilQueue} from "@/modules/dataStructureModule.tsx";
+import {atom, RecoilState} from "recoil";
+import {TaskType} from "@/modules/typeModule.tsx";
+
+const History:RecoilState<TaskType[]> = atom({
+  key: 'History',
+  default: [] as any
+})
 
 const Input = styled.input`
-    background-color: none;
-    padding: 0;
+    background : none;
+    padding: 0 0 0 5px;
+    color: white;
     margin: 0;
     border: none;
     width: 100%;
     height: 2rem;
     bottom: 5px;
+    line-height: 2rem;
+    &:focus {
+        outline: none;
+    }
+`;
+const InputContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    & > p{
+        padding: 0;
+        margin: auto 0;
+        height: 1rem;
+        color: white;
+    }
 `;
 const TerminalContent = styled.div`
     display: flex;
@@ -36,19 +59,19 @@ const LastCommand = styled.div`
 
 const Terminal = () =>{
   const [first, setFirst] = useState(true);
-  const [command,setCommand] = useState<string>();
-  const [history, Push ,Pop,Top] = useQueue();
+  const [command,setCommand] = useState<string>("");
+  const [history, Push ,Pop,] = useRecoilQueue(History);
   const [session, setSession] = useState<string[]>([]);
   useEffect(() => {
     if(!first) {
-      let res: string = "<p>" + Top() + "<br/></p>";
-      let splitCommand: string[] = Top().split(' ');
+      let res: string = "<p>" + command + "<br/></p>";
+      let splitCommand: string[] = command.split(' ');
       if (command == "history") {
         res = GetHistory();
       } else if (splitCommand.length > 1) {
         if (splitCommand[0] == "html") {
-          res += `<${splitCommand[1]}>`;
-          for (let i = 2; i < splitCommand.length; i++) {
+          res = `<${splitCommand[1]} ${splitCommand[2]}>`;
+          for (let i = 3; i < splitCommand.length; i++) {
             res += splitCommand[i] + " ";
           }
           res += `</${splitCommand[1]}>`
@@ -92,7 +115,8 @@ const Terminal = () =>{
         )
       }):(<></>)}
       </CommandContent>
-      <Input onKeyDown={(e:any)=>{
+      <InputContainer>
+      <p>{">"}</p><Input onKeyDown={(e:any)=>{
         if(e.key==="Enter" && !e.nativeEvent.isComposing) {
           console.log(e.target.value);
           Push(e.target.value);
@@ -100,6 +124,7 @@ const Terminal = () =>{
           e.target.value = "";
         }
         }}></Input>
+      </InputContainer>
     </TerminalContent>
   )
 }

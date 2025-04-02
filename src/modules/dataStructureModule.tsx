@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {RecoilState, useRecoilState} from "recoil";
 
 
 const useStack = () => {
@@ -45,5 +46,27 @@ const useQueue = () => {
   return [queue, push, pop, top];
 }
 
+const useRecoilQueue = (atom:RecoilState<any>) => {
+  const [queue, setQueue] = useRecoilState<any[]>(atom);
+  const push:any = (value:any) => {
+    setQueue([...queue, value]);
+  }
+  const pop:any  = () => {
+    if(queue.length>0) {
+      let copy:any[] = [...queue];
+      copy.splice(0,1);
+      setQueue([...copy])
+    }
+  }
+  const top:any = () => {
+    if(queue.length>0)
+      return queue[queue.length-1];
+    else
+      return 0;
+  }
 
-export {useStack, useQueue};
+  return [queue, push, pop, top];
+}
+
+
+export {useStack, useQueue, useRecoilQueue};
