@@ -56,7 +56,7 @@ const ExitButton = styled(HeaderButton)`
         border: 1px solid #600000;
     }
 `;
-const WindowContent = styled.section`
+const WindowContent = styled.div`
     position : absolute;
     top : 30px;
     left : 0;

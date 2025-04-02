@@ -11,60 +11,66 @@ const Input = styled.input`
     height: 2rem;
     bottom: 5px;
 `;
-const TerminalContent = styled.section`
+const TerminalContent = styled.div`
     display: flex;
     align-items: flex-end;
     flex-direction: column;
     background-color: black;
     height: 100%;
     width: 100%;
-`
+`;
 const CommandContent = styled.div`
     display: flex;
     height: 100%;
     flex-direction: column-reverse;
     width: 100%;
     overflow: auto;
-`
+`;
 const LastCommand = styled.div`
     width: 100%;
     color: white;
     display: flex;
     margin: 0;
     padding: 0;
-`
+`;
 
 const Terminal = () =>{
-  const [command,setCommand] = useState<string>("");
-  const [history, Push ,Pop,] = useQueue();
+  const [first, setFirst] = useState(true);
+  const [command,setCommand] = useState<string>();
+  const [history, Push ,Pop,Top] = useQueue();
   const [session, setSession] = useState<string[]>([]);
-  const [isInput, setIsInput] = useState<boolean>(true);
   useEffect(() => {
-    let res:string = "";
-    let temp1 = command.split(' ');
-    if(command == "history"){
-      res = GetHistory();
-    }else if(temp1.length > 1){
-      if(temp1[0] == "html"){
-        console.log("html");
-      }else{
-        res = "";
-        for(let i = 0; i<temp1.length;i++){
-          res+=temp1[i] + " ";
+    if(!first) {
+      let res: string = "<p>" + Top() + "<br/></p>";
+      let splitCommand: string[] = Top().split(' ');
+      if (command == "history") {
+        res = GetHistory();
+      } else if (splitCommand.length > 1) {
+        if (splitCommand[0] == "html") {
+          res += `<${splitCommand[1]}>`;
+          for (let i = 2; i < splitCommand.length; i++) {
+            res += splitCommand[i] + " ";
+          }
+          res += `</${splitCommand[1]}>`
+        } else {
+          for (let i = 0; i < splitCommand.length; i++) {
+            res += splitCommand[i] + " ";
+          }
         }
+      } else {
+        res += "<p>command not found</p>";
       }
-    }else{
-      res = command;
+      console.log(res);
+      setSession([res, ...session]);
+      console.log(session);
     }
-    console.log(res);
-    setSession([res,...session]);
-    console.log(command);
+    setFirst(false);
   }, [command]);
   useEffect(() => {
     if(history.length > 100){
       Pop();
     }
-  },[history]);
+  },[command]);
 
   const GetHistory:()=>string = () => {
     let str="";
@@ -77,11 +83,14 @@ const Terminal = () =>{
   return (
     <TerminalContent>
       <CommandContent>
-      {session.map((item,index)=>(
-          <LastCommand key={index}>
-            <p style={{"padding": 0,"margin" : 0}} dangerouslySetInnerHTML={{__html: item}} key={index}/>
-          </LastCommand>
-      ))}
+      {session ? session.map((item,index)=> {
+        console.log(item + " " + index);
+        return(
+        <LastCommand key={index} >
+          <div style={{"padding": 0, "margin": 0, "width": "100%"}} dangerouslySetInnerHTML={{__html: item}} key={index}/>
+        </LastCommand>
+        )
+      }):(<></>)}
       </CommandContent>
       <Input onKeyDown={(e:any)=>{
         if(e.key==="Enter" && !e.nativeEvent.isComposing) {
