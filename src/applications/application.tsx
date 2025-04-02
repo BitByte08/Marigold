@@ -12,11 +12,17 @@ const WindowHeader = styled.header`
     border-radius: 4px 4px 0 0;
     position : absolute;
     display : flex;
+    justify-content: space-between;
     align-items: center;
     top : 0;
     left : 0;
     right : 0;
     height : 30px;
+`;
+const Title = styled.p`
+    padding : 0;
+    margin : 0 10px 0 0;
+    color: white;
 `;
 const HeaderButton = styled.button`
     height : 20px;
@@ -254,6 +260,7 @@ const Application = (props:any) => {
         props.setFocus(props.name)
       }}>
         <WindowHeader {...moveManager()}>
+          <div>
           {props.focus === props.name?
             <>
               <ExitButton onClick={() =>
@@ -278,6 +285,8 @@ const Application = (props:any) => {
               }> </HeaderButton>
             </>
           }
+          </div>
+          <Title>{props.name}</Title>
         </WindowHeader>
         <WindowContent {...sizeManager()} onMouseUp={()=>setIsFirst(true)}>
           {props.children}
