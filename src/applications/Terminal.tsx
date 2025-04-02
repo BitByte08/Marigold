@@ -3,11 +3,14 @@ import {styled} from "styled-components";
 import {useRecoilQueue} from "@/modules/dataStructureModule.tsx";
 import {atom, RecoilState} from "recoil";
 import {TaskType} from "@/modules/typeModule.tsx";
+import {MGSetHTML} from "@/manager/MariAPIManager.tsx";
 
 const History:RecoilState<TaskType[]> = atom({
   key: 'History',
   default: [] as any
 })
+
+const help:string = "html [tag] [attribute] [content]<br/>";
 
 const Input = styled.input`
     background : none;
@@ -50,6 +53,7 @@ const CommandContent = styled.div`
     overflow: auto;
 `;
 const LastCommand = styled.div`
+    border-bottom: 1px solid gray;
     width: 100%;
     color: white;
     display: flex;
@@ -66,26 +70,21 @@ const Terminal = () =>{
     if(!first) {
       let res: string = "<p>" + command + "<br/></p>";
       let splitCommand: string[] = command.split(' ');
-      if (command == "history") {
-        res = GetHistory();
-      } else if (splitCommand.length > 1) {
-        if (splitCommand[0] == "html") {
-          res = `<${splitCommand[1]} ${splitCommand[2]}>`;
-          for (let i = 3; i < splitCommand.length; i++) {
-            res += splitCommand[i] + " ";
-          }
-          res += `</${splitCommand[1]}>`
-        } else {
-          for (let i = 0; i < splitCommand.length; i++) {
-            res += splitCommand[i] + " ";
-          }
+      if (splitCommand.length >= 1) {
+        if (splitCommand[0].toLowerCase() == "html") {
+          res += MGSetHTML(splitCommand[1],splitCommand[2],3,splitCommand);
+        }else if (splitCommand[0].toLowerCase() == "help") {
+          res += help
+        }else if (splitCommand[0].toLowerCase() == "history") {
+          res += GetHistory();
+        }else{
+          res += MGSetHTML("p","none",0,"command not found");
         }
-      } else {
-        res += "<p>command not found</p>";
       }
-      console.log(res);
       setSession([res, ...session]);
-      console.log(session);
+    }else{
+      let res = "Project Marigold Terminal<br/>기본 명령어를 보려면 help를 입력하세요.";
+      setSession([res, ...session]);
     }
     setFirst(false);
   }, [command]);
@@ -96,11 +95,11 @@ const Terminal = () =>{
   },[command]);
 
   const GetHistory:()=>string = () => {
-    let str="";
+    let res="";
     for(let i=0;i<history.length;i++){
-      str += history[i] + "<br/>";
+      res += (i+1) + ": " + history[i] + "<br/>";
     }
-    return str;
+    return res;
   }
 
   return (
