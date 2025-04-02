@@ -24,7 +24,7 @@ const CommandContent = styled.div`
     height: 100%;
     flex-direction: column-reverse;
     width: 100%;
-    
+    overflow: auto;
 `
 const LastCommand = styled.p`
     width: 100%;
