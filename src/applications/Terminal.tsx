@@ -35,17 +35,28 @@ const LastCommand = styled.div`
 `
 
 const Terminal = () =>{
-  const [command,setCommand] = useState("");
+  const [command,setCommand] = useState<string>("");
   const [history, Push ,Pop,] = useQueue();
   const [session, setSession] = useState<string[]>([]);
+  const [isInput, setIsInput] = useState<boolean>(true);
   useEffect(() => {
-    let res:any;
+    let res:string = "";
+    let temp1 = command.split(' ');
     if(command == "history"){
       res = GetHistory();
-      console.log(res);
+    }else if(temp1.length > 1){
+      if(temp1[0] == "html"){
+        console.log("html");
+      }else{
+        res = "";
+        for(let i = 0; i<temp1.length;i++){
+          res+=temp1[i] + " ";
+        }
+      }
     }else{
       res = command;
     }
+    console.log(res);
     setSession([res,...session]);
     console.log(command);
   }, [command]);
@@ -55,7 +66,7 @@ const Terminal = () =>{
     }
   },[history]);
 
-  const GetHistory:()=>string[] = () => {
+  const GetHistory:()=>string = () => {
     let str="";
     for(let i=0;i<history.length;i++){
       str += history[i] + "<br/>";
@@ -73,9 +84,10 @@ const Terminal = () =>{
       ))}
       </CommandContent>
       <Input onKeyDown={(e:any)=>{
-        if(e.key==="Enter") {
-          setCommand(e.target.value);
+        if(e.key==="Enter" && !e.nativeEvent.isComposing) {
+          console.log(e.target.value);
           Push(e.target.value);
+          setCommand(e.target.value);
           e.target.value = "";
         }
         }}></Input>

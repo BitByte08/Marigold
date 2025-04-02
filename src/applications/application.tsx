@@ -10,6 +10,7 @@ const Window = styled.article`
 const WindowHeader = styled.header`
     background-color: darkolivegreen;
     border-radius: 4px 4px 0 0;
+    padding: 0 5px;
     position : absolute;
     display : flex;
     justify-content: space-between;
@@ -20,14 +21,13 @@ const WindowHeader = styled.header`
     height : 30px;
 `;
 const Title = styled.p`
-    padding : 0;
-    margin : 0 10px 0 0;
+    padding : 0 5px 0 0;
     color: white;
 `;
 const HeaderButton = styled.button`
     height : 20px;
     width : 20px;
-    margin-left: 5px;
+    margin-right: 5px;
 `;
 const MinimizeButton = styled(HeaderButton)`
     background-color: orange;
