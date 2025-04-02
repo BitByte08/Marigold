@@ -3,14 +3,10 @@ import {styled} from "styled-components";
 import {useRecoilQueue} from "@/modules/dataStructureModule.tsx";
 import {atom, RecoilState} from "recoil";
 import {TaskType} from "@/modules/typeModule.tsx";
-import {MGSetHTML} from "@/manager/MariAPIManager.tsx";
+import {commandModule, History} from "@/modules/commandModule.tsx";
 
-const History:RecoilState<TaskType[]> = atom({
-  key: 'History',
-  default: [] as any
-})
 
-const help:string = "html [tag] [attribute,attribute2,...] [content]<br/>";
+
 
 const Input = styled.input`
     background : none;
@@ -68,19 +64,7 @@ const Terminal = () =>{
   const [session, setSession] = useState<string[]>([]);
   useEffect(() => {
     if(!first) {
-      let res: string = "<p>" + command + "<br/></p>";
-      let splitCommand: string[] = command.split(' ');
-      if (splitCommand.length >= 1) {
-        if (splitCommand[0].toLowerCase() == "html") {
-          res += MGSetHTML(splitCommand[1],splitCommand[2],3,splitCommand);
-        }else if (splitCommand[0].toLowerCase() == "help") {
-          res += help
-        }else if (splitCommand[0].toLowerCase() == "history") {
-          res += GetHistory();
-        }else{
-          res += MGSetHTML("p","none",0,"command not found");
-        }
-      }
+      const res:string = commandModule(command,history);
       setSession([res, ...session]);
     }else{
       let res = "Project Marigold Terminal<br/>기본 명령어를 보려면 help를 입력하세요.";
@@ -94,13 +78,7 @@ const Terminal = () =>{
     }
   },[command]);
 
-  const GetHistory:()=>string = () => {
-    let res="";
-    for(let i=0;i<history.length;i++){
-      res += (i+1) + ": " + history[i] + "<br/>";
-    }
-    return res;
-  }
+
 
   return (
     <TerminalContent>
