@@ -11,7 +11,7 @@ const Input = styled.input`
     height: 2rem;
     bottom: 5px;
 `;
-const TerminalContent = styled.div`
+const TerminalContent = styled.section`
     display: flex;
     align-items: flex-end;
     flex-direction: column;
@@ -26,7 +26,7 @@ const CommandContent = styled.div`
     width: 100%;
     overflow: auto;
 `
-const LastCommand = styled.p`
+const LastCommand = styled.div`
     width: 100%;
     color: white;
     display: flex;
@@ -68,7 +68,7 @@ const Terminal = () =>{
       <CommandContent>
       {session.map((item,index)=>(
           <LastCommand key={index}>
-            <p dangerouslySetInnerHTML={{__html: item}} />
+            <p style={{"padding": 0,"margin" : 0}} dangerouslySetInnerHTML={{__html: item}} key={index}/>
           </LastCommand>
       ))}
       </CommandContent>
