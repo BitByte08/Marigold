@@ -63,6 +63,7 @@ const Terminal = () =>{
   const [first, setFirst] = useState(true);
   const [command,setCommand] = useState<string>("");
   const [history, Push ,Pop,] = useRecoilQueue(History);
+  let historyLength= history.length
   const [session, setSession] = useState<string[]>([]);
   useEffect(() => {
     if(!first) {
@@ -86,7 +87,6 @@ const Terminal = () =>{
     <TerminalContent>
       <CommandContent>
       {session ? session.map((item,index)=> {
-        console.log(item + " " + index);
         return(
         <LastCommand key={index} >
           <div style={{"padding": 0, "margin": 0, "width": "100%"}} dangerouslySetInnerHTML={{__html: item}} key={index}/>
@@ -96,13 +96,19 @@ const Terminal = () =>{
       </CommandContent>
       <InputContainer>
       <p>{">"}</p><Input onKeyDown={(e:any)=>{
+        setTimeout(()=>{
         if(e.key==="Enter" && !e.nativeEvent.isComposing) {
-          console.log(e.target.value);
+          historyLength = history.length;
           Push(e.target.value);
           setCommand(e.target.value);
           e.target.value = "";
-        }
-        }}></Input>
+        }else if(e.key==="ArrowUp"){
+          historyLength-=(historyLength>0?1:0);
+          e.target.value = `${history[historyLength]}`;
+        }else if(e.key==="ArrowDown"){
+          historyLength+=(historyLength<history.length-1?1:0);
+          e.target.value = `${history[historyLength]}`;
+        }},0);}}></Input>
       </InputContainer>
     </TerminalContent>
   )
