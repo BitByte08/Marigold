@@ -1,9 +1,8 @@
 import {useEffect, useState} from "react";
 import {styled} from "styled-components";
 import {useRecoilQueue} from "@/modules/dataStructureModule.tsx";
-import {atom, RecoilState} from "recoil";
-import {TaskType} from "@/modules/typeModule.tsx";
 import {commandModule, History} from "@/modules/commandModule.tsx";
+import {useProcessManager} from "@/manager/processManager.tsx";
 
 
 
@@ -39,6 +38,8 @@ const TerminalContent = styled.div`
     flex-direction: column;
     background-color: black;
     height: 100%;
+    padding: 0 5px;
+    box-sizing: border-box;
     width: 100%;
 `;
 const CommandContent = styled.div`
@@ -58,13 +59,14 @@ const LastCommand = styled.div`
 `;
 
 const Terminal = () =>{
+  const [tasklist, addTask, removeTask] = useProcessManager();
   const [first, setFirst] = useState(true);
   const [command,setCommand] = useState<string>("");
   const [history, Push ,Pop,] = useRecoilQueue(History);
   const [session, setSession] = useState<string[]>([]);
   useEffect(() => {
     if(!first) {
-      const res:string = commandModule(command,history);
+      const res:string = commandModule(command,history,tasklist, addTask, removeTask);
       setSession([res, ...session]);
     }else{
       let res = "Project Marigold Terminal<br/>기본 명령어를 보려면 help를 입력하세요.";

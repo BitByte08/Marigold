@@ -1,7 +1,8 @@
-import {MGSetHTML} from "@/manager/MariAPIManager.tsx";
-import {atom, RecoilState, useRecoilValue} from "recoil";
+import {MGProcess, MGSetHTML} from "@/manager/MariAPIManager.tsx";
+import {atom, RecoilState} from "recoil";
 import {TaskType} from "@/modules/typeModule.tsx";
-import {useRecoilQueue} from "@/modules/dataStructureModule.tsx";
+import {taskManager} from "@/manager/taskManager.ts";
+import {useProcessManager} from "@/manager/processManager.tsx";
 
 export const History:RecoilState<TaskType[]> = atom({
   key: 'History',
@@ -16,11 +17,14 @@ const GetHistory:(history:string[])=>string = (history:string[]) => {
   return res;
 }
 
+
+
 const getHelp:()=>string = () => ("html [tag] [attribute,attribute2,...] [content]<br/>" +
   "history<br/>" +
-  "rm [classname or id]<br/>")
+  "rm [classname or id]<br/>" +
+  "task [list, exec, kill] [taskname]")
 
-export const commandModule = (command:string,history:string[]) => {
+export const commandModule = (command:string,history:string[],tasklist,addTask,removeTask) => {
   let res: string = "<p>" + command + "<br/></p>";
   let splitCommand: string[] = command.split(' ');
   if (splitCommand.length >= 1) {
@@ -37,7 +41,12 @@ export const commandModule = (command:string,history:string[]) => {
       for(let i = 0; i < searchClass.length;) {
         searchClass[i].remove();
       }
-    }else{
+    }else if(splitCommand[0].toLowerCase() == "task"){
+      if(splitCommand[1].toLowerCase() == "list") res += MGProcess(0,undefined,tasklist,addTask,removeTask);
+      else if(splitCommand[1].toLowerCase() == "exec") res += MGProcess(1,splitCommand[2],tasklist,addTask,removeTask)
+      else if(splitCommand[1].toLowerCase() == "kill") res += MGProcess(2,splitCommand[2],tasklist,addTask,removeTask)
+      else res += MGSetHTML("p","none",0,"command not found");
+    } else{
       res += MGSetHTML("p","none",0,"command not found");
     }
   }
