@@ -1,8 +1,6 @@
 import {MGProcess, MGSetHTML} from "@/manager/MariAPIManager.tsx";
 import {atom, RecoilState} from "recoil";
 import {TaskType} from "@/modules/typeModule.tsx";
-import {taskManager} from "@/manager/taskManager.ts";
-import {useProcessManager} from "@/manager/processManager.tsx";
 
 export const History:RecoilState<TaskType[]> = atom({
   key: 'History',
@@ -24,7 +22,7 @@ const getHelp:()=>string = () => ("html [tag] [attribute,attribute2,...] [conten
   "rm [classname or id]<br/>" +
   "task [list, exec, kill] [taskname]")
 
-export const commandModule = (command:string,history:string[],tasklist,addTask,removeTask) => {
+export const commandModule = (command:string,history:string[],tasklist:TaskType[] ,addTask:TaskType,removeTask:TaskType) => {
   let res: string = "<p>" + command + "<br/></p>";
   let splitCommand: string[] = command.split(' ');
   if (splitCommand.length >= 1) {

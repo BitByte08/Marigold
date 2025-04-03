@@ -18,7 +18,7 @@ export const MGSetHTML = (tag:string, atbt:string, start_ctnt:number, ctnt:strin
 
 const FindTask = (tasklist, target) => {
   for(let i=0;i<tasklist.length;i++){
-    if(tasklist[i].name == target){
+    if(tasklist[i].name.toLowerCase() == target?.toLowerCase()){
       return false;
     }
   }
@@ -40,7 +40,7 @@ export const MGProcess = (action:number=0,target:string|undefined = undefined,ta
     if(action==1){
       if(!FindTask(tasklist, target)) return "이미 실행된 프로세스.";
       for (let i = 0; i < Apps.length; i++) {
-        if (Apps[i].name == target) {
+        if (Apps[i].name.toLowerCase() == target?.toLowerCase()) {
           addTask(Apps[i]);
         }
       }
@@ -48,7 +48,7 @@ export const MGProcess = (action:number=0,target:string|undefined = undefined,ta
     }else if(action==2){
       if(FindTask(tasklist, target)) return "실행되지 않은 프로세스.";
       for (let i = 0; i < Apps.length; i++) {
-        if (Apps[i].name == target) {
+        if (Apps[i].name.toLowerCase() == target?.toLowerCase()) {
           removeTask(Apps[i]);
         }
       }
