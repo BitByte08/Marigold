@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {Apps} from '@/manager/importManager.tsx';
 import {TaskType} from "@/modules/typeModule.tsx";
+import {useProcessManager} from "@/manager/processManager.tsx";
 
 const Container = styled.section`
     position: absolute;
@@ -39,7 +40,8 @@ const Snapshot = styled.li`
         width: 100%;
     }
 `
-const Observer = (props) => {
+const Observer = () => {
+  const [,addTask,] = useProcessManager();
   return (
     <Container>
       <Logo>
@@ -51,7 +53,7 @@ const Observer = (props) => {
             return (
               <Snapshot key={Application.id}>
                 <button onClick={() => {
-                  props.addTask(Application);
+                  addTask(Application.name);
                 }}>{Application.name}</button>
               </Snapshot>
             )

@@ -123,7 +123,7 @@ const Application = (props:any) => {
       props.setTabDownInterrupt("empty")
     }
   },[props.tabDownInterrupt])
-  useEffect(()=>{ //Fucus가 본인이면 가장 높은 Layer로 렌더링
+  useEffect(()=>{ //Focus가 본인이면 가장 높은 Layer로 렌더링
     if(props.type !== "Shell") {
       if (props.focus === props.name) {
         props.setLayer(props.layer + 1);

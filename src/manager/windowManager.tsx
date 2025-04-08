@@ -112,7 +112,7 @@ const WindowManager = () => {
                   )
                 })
               }
-              {startOption? <Observer addTask={addTask}/>:<></>}
+              {startOption? <Observer />:<></>}
           <TaskBar>
             <TaskList>
                   {
