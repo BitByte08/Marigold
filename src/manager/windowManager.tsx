@@ -1,6 +1,5 @@
 import {useEffect, useState, Suspense, lazy} from 'react';
 import styled from "styled-components";
-import Discover from "../applications/discover.tsx";
 import Observer from "../applications/utility/Observer.tsx";
 import {useProcessManager} from "./processManager.tsx";
 import {TaskType} from "../modules/typeModule.tsx";
@@ -59,18 +58,8 @@ const WindowManager = () => {
     }
   },[focus])
   useEffect(()=>{ //초기 기본 설정
-    const discover:TaskType = {
-      "component":<Discover />,
-      "type":"Shell",
-      "id":0,
-      "layer":0,
-      "name":"Discover",
-      "appSetup":undefined
-    }
     setTimeout(()=>{ //Discover 실행
-      addTask(
-        discover
-      )
+      addTask("discover")
     }, 200)
 
     const container:HTMLElement = document.getElementById("display") as HTMLElement; // 화면 기준을 컨테이너로 설정

@@ -47,13 +47,15 @@ const Observer = (props) => {
       </Logo>
       <SnapshotList>
         {Apps.map((Application:TaskType)=>{
-          return(
-            <Snapshot key={Application.id}>
-              <button onClick={() => {
-                props.addTask(Application);
-              }}>{Application.name}</button>
-            </Snapshot>
-          )
+          if(Application.type==="App") {
+            return (
+              <Snapshot key={Application.id}>
+                <button onClick={() => {
+                  props.addTask(Application);
+                }}>{Application.name}</button>
+              </Snapshot>
+            )
+          }
         })}
       </SnapshotList>
     </Container>

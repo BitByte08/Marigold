@@ -1,8 +1,29 @@
 import {useEffect, useState} from "react";
 import {styled} from "styled-components";
 import {useRecoilQueue} from "@/modules/dataStructureModule.tsx";
-import {commandModule, History} from "@/modules/commandModule.tsx";
+import {atom, RecoilState} from "recoil";
+import {TaskType} from "@/modules/typeModule.tsx";
+import setHTML from "@/modules/interfaceModule.tsx";
 import {useProcessManager} from "@/manager/processManager.tsx";
+
+
+const getHistory:(history:string[])=>string = (history:string[]) => {
+  let res="";
+  for(let i=0;i<history.length;i++){
+    res += (i+1) + ": " + history[i] + "<br/>";
+  }
+  return res;
+}
+const getHelp:()=>string = () => ("html [tag] [attribute,attribute2,...] [content]<br/>" +
+  "history<br/>" +
+  "rm [classname or id]<br/>" +
+  "task [list, exec, kill] [taskname]")
+
+const History:RecoilState<TaskType[]> = atom({
+  key: 'History',
+  default: [] as any
+})
+
 
 
 
@@ -59,15 +80,39 @@ const LastCommand = styled.div`
 `;
 
 const Terminal = () =>{
-  const [tasklist, addTask, removeTask] = useProcessManager();
   const [first, setFirst] = useState(true);
   const [command,setCommand] = useState<string>("");
   const [history, Push ,Pop,] = useRecoilQueue(History);
+  const [list,addTask,removeTask] = useProcessManager();
   let historyLength= history.length
   const [session, setSession] = useState<string[]>([]);
   useEffect(() => {
     if(!first) {
-      const res:string = commandModule(command,history,tasklist, addTask, removeTask);
+      let res: string = "<p>" + command + "<br/></p>";
+      let splitCommand: string[] = command.split(' ');
+      if (splitCommand.length >= 1) {
+        if (splitCommand[0].toLowerCase() == "html") {
+          res += setHTML(splitCommand[1],splitCommand[2],3,splitCommand);
+        }else if (splitCommand[0].toLowerCase() == "help") {
+          res += getHelp();
+        }else if (splitCommand[0].toLowerCase() == "history") {
+          res += getHistory(history);
+        }else if (splitCommand[0].toLowerCase() == "rm") {
+          const searchId = document.getElementById(splitCommand[1]);
+          if(searchId){searchId.remove()}
+          const searchClass = document.getElementsByClassName(splitCommand[1]);
+          for(let i = 0; i < searchClass.length;) {
+            searchClass[i].remove();
+          }
+        }else if(splitCommand[0].toLowerCase() == "task"){
+          if(splitCommand[1].toLowerCase() == "list") res += list;
+          else if(splitCommand[1].toLowerCase() == "exec") res += addTask(splitCommand[2])
+          else if(splitCommand[1].toLowerCase() == "kill") res += removeTask(splitCommand[2])
+          else res += setHTML("p","none",0,"command not found");
+        } else{
+          res += setHTML("p","none",0,"command not found");
+        }
+      }
       setSession([res, ...session]);
     }else{
       let res = "Project Marigold Terminal<br/>기본 명령어를 보려면 help를 입력하세요.";

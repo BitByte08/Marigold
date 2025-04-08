@@ -1,9 +1,9 @@
 import {atom, RecoilState} from 'recoil'
 import {TaskType} from '@/modules/typeModule.tsx'
 
-const taskManager:RecoilState<TaskType[]> = atom({
-  key: 'taskManager',
+const taskModule:RecoilState<TaskType[]> = atom({
+  key: 'taskModule',
   default: [] as any
 })
 
-export {taskManager}
+export {taskModule}

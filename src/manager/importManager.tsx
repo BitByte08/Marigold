@@ -1,8 +1,8 @@
 import {Suspense, lazy} from "react";
 import {TaskType} from "@/modules/typeModule.tsx";
-
-const Terminal =  lazy(()=> import("../applications/Terminal.tsx"));
-const Settings = lazy(()=> import("../applications/settings.tsx"));
+const Discover = lazy(()=> import("@/applications/discover.tsx"));
+const Terminal =  lazy(()=> import("@/applications/Terminal.tsx"));
+const Settings = lazy(()=> import("@/applications/settings.tsx"));
 //Application Import 형식 예시
 /*
 {
@@ -19,6 +19,13 @@ const Settings = lazy(()=> import("../applications/settings.tsx"));
  */
 const Apps:TaskType[] =
     [
+      {"component": <Discover />,
+        "type":"Shell",
+        "id":0,
+        "layer":0,
+        "name":"Discover",
+        "appSetup":undefined
+      },
       {
         "component": <Suspense fallback={null}><Terminal/></Suspense>,
         "type": "App",
