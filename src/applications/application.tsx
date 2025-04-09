@@ -4,11 +4,11 @@ import {toNumber} from "@/modules/typeModule.tsx";
 import styled from "styled-components";
 
 const Window = styled.article`
-    border: 1px solid black;
+    border: 1px solid #575757;
     border-radius: 5px;
 `
 const WindowHeader = styled.header`
-    background-color: darkolivegreen;
+    background-color: #3A3A3A;
     border-radius: 4px 4px 0 0;
     padding: 0 5px;
     position : absolute;
@@ -62,9 +62,9 @@ const WindowContent = styled.div`
     left : 0;
     right : 0;
     bottom : 0;
-    padding : 0 5px 5px 5px;
+    padding : 0 2px 2px 2px;
     box-sizing: border-box;
-    background-color: lawngreen;
+    background-color: #3A3A3A;
     border-radius: 0 0 4px 4px;
 `;
 const Shell = styled.article`
@@ -148,6 +148,7 @@ const Application = (props:any) => {
       const bounds = container.getBoundingClientRect();
       setBackupWindow(window);
       setWindow({
+        transition: "all 500ms ease-in-out",
         display: undefined,
         position: window.position,
         height: `calc(100vh - 52px)`,
@@ -159,7 +160,21 @@ const Application = (props:any) => {
         filter: undefined
       })
     }else if(!isFullScreen){
-      setWindow(backupWindow);
+      setWindow({
+        transition: "all 500ms ease-in-out",
+        display: backupWindow.display,
+        position: backupWindow.position,
+        height: backupWindow.height,
+        width: backupWindow.width,
+        top: backupWindow.top,
+        left: backupWindow.left,
+        zIndex: backupWindow.zIndex,
+        backgroundColor: backupWindow.backgroundColor,
+        filter: undefined
+      })
+      setTimeout(()=>{
+        setWindow(backupWindow);
+      },500)
     }
   }, [isFullScreen]);
 
@@ -264,7 +279,7 @@ const Application = (props:any) => {
           {props.focus === props.name?
             <>
               <ExitButton onClick={() =>
-                props.removeTask(props.removeCompnent)
+                props.removeTask(props.name)
               }></ExitButton>
               <FullScreenButton onClick={()=>
                 setIsFullScreen(!isFullScreen)
@@ -275,7 +290,7 @@ const Application = (props:any) => {
             </>:
             <>
               <HeaderButton onClick={() =>
-                props.removeTask(props.removeCompnent)
+                props.removeTask(props.name)
               }></HeaderButton>
               <HeaderButton onClick={()=>
                 setIsFullScreen(!isFullScreen)

@@ -2,6 +2,7 @@ body {
     margin: 0;
     overflow: hidden;
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    color: white;
 }
 
 
@@ -36,7 +37,7 @@ body {
     z-index: 999;
 }
 .shell{
-    background-color: darkseagreen;
+    background-color: #121212;
     display: grid;
     grid-template-columns: repeat(auto-fill,minmax(5rem,5rem));
     grid-template-rows: repeat(auto-fill, minmax(5rem,5rem));

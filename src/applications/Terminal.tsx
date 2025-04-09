@@ -5,6 +5,7 @@ import {atom, RecoilState} from "recoil";
 import {TaskType} from "@/modules/typeModule.tsx";
 import setHTML from "@/modules/interfaceModule.tsx";
 import {useProcessManager} from "@/manager/processManager.tsx";
+import AppContent from "@/modules/styleModule.tsx";
 
 
 const getHistory:(history:string[])=>string = (history:string[]) => {
@@ -53,15 +54,12 @@ const InputContainer = styled.div`
         color: white;
     }
 `;
-const TerminalContent = styled.div`
+const TerminalContent = styled(AppContent)`
     display: flex;
     align-items: flex-end;
     flex-direction: column;
     background-color: black;
-    height: 100%;
     padding: 0 5px;
-    box-sizing: border-box;
-    width: 100%;
 `;
 const CommandContent = styled.div`
     display: flex;

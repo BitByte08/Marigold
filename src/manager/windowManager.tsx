@@ -10,9 +10,11 @@ const TaskBar = styled.footer`
     position: sticky;
     bottom: 0;
     width: inherit;
-    height: 3.125rem;
+    height: 3.75rem;
     z-index: 998;
-    background-color: springgreen;
+    opacity: 0.8;
+    background-color: #3A3A3A;
+    border-top: 1px solid #575757;
 `;
 const Display = styled.main`
     height: 100vh;
@@ -29,12 +31,28 @@ const TaskList = styled.ul`
     display: flex;
     align-content: center;
 `;
+const TaskButton = styled.button`
+    height: 100%;
+    border: 1px solid #575757;
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 0 20px;
+    color: white;
+`;
 
+const TaskSelectButton = styled.button`
+    height: 100%;
+    border: 1px solid #575757;
+    background-color: #1D1D1D;
+    padding: 0 20px;
+    border-radius: 5px;
+    color: white;
+`
 
 const WindowManager = () => {
   const taskButtonStyle = {
     height: "100%",
-    backgroundColor:"lightgreen"
+    border: "1px"
   };
   const taskSelectButtonStyle = {
     height: "100%",
@@ -137,17 +155,17 @@ const WindowManager = () => {
                         if (task.name === focus) {
                           return (
                             <li style={taskStyle} key={task.name}>
-                            <button style={taskSelectButtonStyle} onClick={() => {
+                            <TaskSelectButton onClick={() => {
                               setTabDownInterrupt(task.name);
-                              }}>{task.name}</button>
+                              }}>{task.name}</TaskSelectButton>
                             </li>
                           )
                         } else {
                           return (
                             <li style={taskStyle} key={task.name}>
-                              <button style={taskButtonStyle} onClick={() => {
+                              <TaskButton onClick={() => {
                                 setFocus(task.name);
-                              }}>{task.name}</button>
+                              }}>{task.name}</TaskButton>
                             </li>
                           )
                         }
