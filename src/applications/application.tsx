@@ -29,6 +29,11 @@ const HeaderButton = styled.button`
     width : 20px;
     margin-right: 5px;
 `;
+const NotFocusButton = styled(HeaderButton)`
+    background-color: lightgray;
+    border: 1px solid gray;
+    border-radius : 2px;
+`
 const MinimizeButton = styled(HeaderButton)`
     background-color: orange;
     border: 1px solid darkorange;
@@ -151,7 +156,7 @@ const Application = (props:any) => {
         transition: "all 500ms ease-in-out",
         display: undefined,
         position: window.position,
-        height: `calc(100vh - 52px)`,
+        height: `calc(100vh - 62px)`,
         width: `calc(100vw - 2px)`,
         top: bounds.top,
         left: 0,
@@ -159,6 +164,19 @@ const Application = (props:any) => {
         backgroundColor: window.backgroundColor,
         filter: undefined
       })
+      setTimeout(()=>{
+        setWindow({
+          display: undefined,
+          position: window.position,
+          height: `calc(100vh - 62px)`,
+          width: `calc(100vw - 2px)`,
+          top: bounds.top,
+          left: 0,
+          zIndex: props.layer-1,
+          backgroundColor: window.backgroundColor,
+          filter: undefined
+        })
+      },500)
     }else if(!isFullScreen){
       setWindow({
         transition: "all 500ms ease-in-out",
@@ -289,15 +307,15 @@ const Application = (props:any) => {
               }> </MinimizeButton>
             </>:
             <>
-              <HeaderButton onClick={() =>
+              <NotFocusButton onClick={() =>
                 props.removeTask(props.name)
-              }></HeaderButton>
-              <HeaderButton onClick={()=>
+              }></NotFocusButton>
+              <NotFocusButton onClick={()=>
                 setIsFullScreen(!isFullScreen)
-              }></HeaderButton>
-              <HeaderButton onClick={()=>
+              }></NotFocusButton>
+              <NotFocusButton onClick={()=>
                 setIsMinimized(!isMinimized)
-              }> </HeaderButton>
+              }> </NotFocusButton>
             </>
           }
           </div>
