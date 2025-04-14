@@ -18,10 +18,6 @@ const getHelp:()=>string = () => ("html [tag] [attribute,attribute2,...] [conten
   "rm [classname or id]<br/>" +
   "task [list, exec, kill] [taskname]")
 
-
-
-
-
 const Input = styled.input`
     background : none;
     padding: 0 0 0 5px;
