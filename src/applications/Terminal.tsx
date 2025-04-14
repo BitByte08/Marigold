@@ -1,8 +1,6 @@
 import {useEffect, useState} from "react";
 import {styled} from "styled-components";
-import {useRecoilQueue} from "@/modules/dataStructureModule.tsx";
-import {atom, RecoilState} from "recoil";
-import {TaskType} from "@/modules/typeModule.tsx";
+import {useQueueStore} from "@/modules/dataStructureModule.tsx";
 import setHTML from "@/modules/interfaceModule.tsx";
 import {useProcessManager} from "@/manager/processManager.tsx";
 import AppContent from "@/modules/styleModule.tsx";
@@ -19,11 +17,6 @@ const getHelp:()=>string = () => ("html [tag] [attribute,attribute2,...] [conten
   "history<br/>" +
   "rm [classname or id]<br/>" +
   "task [list, exec, kill] [taskname]")
-
-const History:RecoilState<TaskType[]> = atom({
-  key: 'History',
-  default: [] as any
-})
 
 
 
@@ -80,7 +73,8 @@ const LastCommand = styled.div`
 const Terminal = () =>{
   const [first, setFirst] = useState(true);
   const [command,setCommand] = useState<string>("");
-  const [history, Push ,Pop,] = useRecoilQueue(History);
+  const history = useQueueStore(state => state.queue);
+  const {push,pop,} = useQueueStore(state => state.actions);
   const [list,addTask,removeTask] = useProcessManager();
   let historyLength= history.length
   const [session, setSession] = useState<string[]>([]);
@@ -120,7 +114,7 @@ const Terminal = () =>{
   }, [command]);
   useEffect(() => {
     if(history.length > 100){
-      Pop();
+      pop();
     }
   },[command]);
 
@@ -142,7 +136,7 @@ const Terminal = () =>{
         setTimeout(()=>{
         if(e.key==="Enter" && !e.nativeEvent.isComposing) {
           historyLength = history.length;
-          Push(e.target.value);
+          push(e.target.value);
           setCommand(e.target.value);
           e.target.value = "";
         }else if(e.key==="ArrowUp"){
