@@ -1,6 +1,5 @@
 import {TaskType} from '../modules/typeModule.tsx'
-import {useRecoilState} from "recoil";
-import {taskModule} from "@/modules/taskModule.ts";
+import {useTaskListStore} from "@/modules/taskModule.ts";
 import {Apps} from "@/manager/importManager.tsx";
 
 //프로세스 관리 훅
@@ -17,15 +16,8 @@ const FindTask = (tasklist:TaskType[], target:string|undefined = undefined) => {
 }
 
 const useProcessManager: () => [TaskType[], (name: string) => boolean, (name: string) => boolean] = () => {
-  const [taskList, setTaskList] = useRecoilState<TaskType[]>(taskModule);
-  const addTask = (component:TaskType) => {
-    setTaskList(Task => (!Task.includes(component))?
-      [...Task, component]:[...Task])
-  };
-  const removeTask = (component:TaskType) => {
-    setTaskList(Task => (Task.some(item => item.name === component.name)) ?
-      Task.filter(item => item.name !== component.name) : [...Task])
-  };
+  const taskList = useTaskListStore(state => state.TaskList);
+  const {addTask, removeTask} = useTaskListStore(state => state.actions);
   const addTaskAsName = (name: string) => {
     if (!FindTask(taskList, name)) return false;
     for (let i = 0; i < Apps.length; i++) {
