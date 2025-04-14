@@ -1,5 +1,4 @@
 import {useState} from "react";
-import {RecoilState, useRecoilState} from "recoil";
 import {create} from "zustand/react";
 
 interface State {
@@ -58,28 +57,6 @@ const useQueue = () => {
   return [queue, push, pop, top];
 }
 
-const useRecoilQueue = (atom:RecoilState<any>) => {
-  const [queue, setQueue] = useRecoilState<any[]>(atom);
-  const push:any = (value:any) => {
-    setQueue([...queue, value]);
-  }
-  const pop:any  = () => {
-    if(queue.length>0) {
-      let copy:any[] = [...queue];
-      copy.splice(0,1);
-      setQueue([...copy])
-    }
-  }
-  const top:any = () => {
-    if(queue.length>0)
-      return queue[queue.length-1];
-    else
-      return 0;
-  }
-
-  return [queue, push, pop, top];
-}
-
 const useQueueStore = create<State & Actions>((set,get) =>(
   {
     queue: [],
@@ -107,4 +84,4 @@ const useQueueStore = create<State & Actions>((set,get) =>(
 ))
 
 
-export {useStack, useQueue, useRecoilQueue, useQueueStore};
+export {useStack, useQueue, useQueueStore};
