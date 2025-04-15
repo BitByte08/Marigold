@@ -252,10 +252,10 @@ const Application = (props:any) => {
       setWindow({
         display: undefined,
         position: window.position,
-        height: y <= 0 || y >= bounds.height-6?(bounds.height - window.top - 2):(heightCondition()?heightLimit(params):window.height),
-        width: x <= 0 || x >= bounds.width-6?(bounds.width - window.left - 2):(widthCondition()?widthLimit(params):window.width),
+        height: (y <= 0 || y >= bounds.height-62) && heightCondition()?(bounds.height - window.top - 64):(heightCondition()?heightLimit(params):window.height),
+        width: (x <= 0 || x >= bounds.width-6) && (widthCondition()&&!leftCondition())?(bounds.width - window.left - 4):(widthCondition()?widthLimit(params):window.width),
         top: window.top,
-        left: x <= 0 || x >= bounds.width-6?0:(leftCondition()?leftLimit(params):window.left),
+        left: (x <= 0 || x >= bounds.width-6) && leftCondition()?2:(leftCondition()?leftLimit(params):window.left),
         zIndex: props.layer - 1,
         backgroundColor: window.backgroundColor,
         filter: "dropShadow(gray 0px 0px 15px)"
