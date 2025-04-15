@@ -57,7 +57,6 @@ const WindowManager = () => {
     backgroundColor:"seagreen"
   }
   const taskStyle = { margin: "0.25rem" };
-
   let cursor:any = null;
   const [cursorVec, setCursorVec] = useState<string[]>(["0","0"]);  //보정 후 커서 위치
   const [mouseBeacon, setMouseBeacon] = useState<number[]>([0,0]); //마우스 절대 위치
@@ -80,13 +79,43 @@ const WindowManager = () => {
 
     const container:HTMLElement = document.getElementById("main") as HTMLElement; // 화면 기준을 컨테이너로 설정
     cursor = document.getElementById("cursor"); // 커서 불러오기
+    window.addEventListener("resize", function() {
+      console.log("resize");
+      document.removeEventListener("mousemove", (event:MouseEvent) => {
+        let x = event.clientX - bounds.x;
+        let y = event.clientY - bounds.y;
+        // 컨테이너 내부에만 커서를 제한
+        x = Math.max(0, Math.min(bounds.width - 5, x));
+        y = Math.max(0, Math.min(bounds.height - 5 , y));
 
+        cursor.style.left = `${x}px`;
+        cursor.style.top = `${y}px`;
+
+        setMouseBeacon([event.clientX, event.clientY]);
+        setCursorVec([`${x}`,`${y}`]);
+      });
+      const container:HTMLElement = document.getElementById("main") as HTMLElement;
+      const bounds = container.getBoundingClientRect();
+      document.addEventListener("mousemove", (event:MouseEvent) => {
+        let x = event.clientX - bounds.x;
+        let y = event.clientY - bounds.y;
+        // 컨테이너 내부에만 커서를 제한
+        x = Math.max(0, Math.min(bounds.width - 5, x));
+        y = Math.max(0, Math.min(bounds.height - 5 , y));
+
+        cursor.style.left = `${x}px`;
+        cursor.style.top = `${y}px`;
+
+        setMouseBeacon([event.clientX, event.clientY]);
+        setCursorVec([`${x}`,`${y}`]);
+      });
+    })
     // 컨테이너의 위치 및 크기
     const bounds = container.getBoundingClientRect();
     document.addEventListener("mousemove", (event:MouseEvent) => {
       let x = event.clientX - bounds.x;
       let y = event.clientY - bounds.y;
-        // 컨테이너 내부에만 커서를 제한
+      // 컨테이너 내부에만 커서를 제한
       x = Math.max(0, Math.min(bounds.width - 5, x));
       y = Math.max(0, Math.min(bounds.height - 5 , y));
 
