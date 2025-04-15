@@ -244,14 +244,18 @@ const Application = (props:any) => {
   }
   const sizeManager = useDrag((params)=>{ //size 조절
     if(isFirst && !isFullScreen && (heightCondition() || widthCondition() || leftCondition())) {
-
+      const container = document.getElementById("display") as HTMLElement;
+      const bounds = container.getBoundingClientRect();
+      let x = parseFloat(cursor[0]);
+      let y = parseFloat(cursor[1]);
+      console.log(y, bounds.height);
       setWindow({
         display: undefined,
         position: window.position,
-        height: heightCondition()?heightLimit(params):window.height,
-          width: widthCondition()?widthLimit(params):window.width,
+        height: y <= 0 || y >= bounds.height-6?(bounds.height - window.top - 2):(heightCondition()?heightLimit(params):window.height),
+        width: x <= 0 || x >= bounds.width-6?(bounds.width - window.left - 2):(widthCondition()?widthLimit(params):window.width),
         top: window.top,
-        left: leftCondition()?leftLimit(params):window.left,
+        left: x <= 0 || x >= bounds.width-6?0:(leftCondition()?leftLimit(params):window.left),
         zIndex: props.layer - 1,
         backgroundColor: window.backgroundColor,
         filter: "dropShadow(gray 0px 0px 15px)"

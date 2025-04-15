@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Observer from "../applications/utility/Observer.tsx";
 import {useProcessManager} from "./processManager.tsx";
 import {TaskType} from "../modules/typeModule.tsx";
+import {DisplayDriver} from "@/drivers/displayDriver.tsx";
 const Application = lazy(()=> import('../applications/application.tsx'));
 
 
@@ -15,12 +16,6 @@ const TaskBar = styled.footer`
     opacity: 0.8;
     background-color: #3A3A3A;
     border-top: 1px solid #575757;
-`;
-const Display = styled.main`
-    height: 100vh;
-    width: 100vw;
-    inset: 0;
-    margin: 0 auto;
 `;
 const TaskList = styled.ul`
     margin:0;
@@ -90,7 +85,7 @@ const WindowManager = () => {
       let y = event.clientY - bounds.y;
         // 컨테이너 내부에만 커서를 제한
       x = Math.max(0, Math.min(bounds.width - 5, x));
-      y = Math.max(0, Math.min(bounds.height - 5, y));
+      y = Math.max(0, Math.min(bounds.height - 5 , y));
 
       cursor.style.left = `${x}px`;
       cursor.style.top = `${y}px`;
@@ -103,9 +98,8 @@ const WindowManager = () => {
   
 
   return(
-    <div>
+    <DisplayDriver>
       <Suspense fallback={null}>
-        <Display>
           <div id="cursor"></div>
               {
                 taskList.map((task:TaskType) => {
@@ -174,9 +168,8 @@ const WindowManager = () => {
                   }
             </TaskList>
           </TaskBar>
-        </Display>
       </Suspense>
-    </div>
+    </DisplayDriver>
   )
 }
 export default WindowManager;
