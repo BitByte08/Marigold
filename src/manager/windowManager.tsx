@@ -8,7 +8,7 @@ const Application = lazy(()=> import('../applications/application.tsx'));
 
 
 const TaskBar = styled.footer`
-    position: sticky;
+    position: absolute;
     bottom: 0;
     width: inherit;
     height: 3.75rem;
@@ -43,6 +43,9 @@ const TaskSelectButton = styled.button`
     border-radius: 5px;
     color: white;
 `
+const MainDisplay = styled(DisplayDriver)`
+      grid-area: Display;
+`;
 
 const WindowManager = () => {
   const taskButtonStyle = {
@@ -75,7 +78,7 @@ const WindowManager = () => {
       addTask("discover")
     }, 200)
 
-    const container:HTMLElement = document.getElementById("display") as HTMLElement; // 화면 기준을 컨테이너로 설정
+    const container:HTMLElement = document.getElementById("main") as HTMLElement; // 화면 기준을 컨테이너로 설정
     cursor = document.getElementById("cursor"); // 커서 불러오기
 
     // 컨테이너의 위치 및 크기
@@ -98,7 +101,7 @@ const WindowManager = () => {
   
 
   return(
-    <DisplayDriver>
+    <MainDisplay id="main">
       <Suspense fallback={null}>
           <div id="cursor"></div>
               {
@@ -169,7 +172,7 @@ const WindowManager = () => {
             </TaskList>
           </TaskBar>
       </Suspense>
-    </DisplayDriver>
+    </MainDisplay>
   )
 }
 export default WindowManager;

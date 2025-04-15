@@ -244,7 +244,7 @@ const Application = (props:any) => {
   }
   const sizeManager = useDrag((params)=>{ //size 조절
     if(isFirst && !isFullScreen && (heightCondition() || widthCondition() || leftCondition())) {
-      const container = document.getElementById("display") as HTMLElement;
+      const container = document.getElementById("main") as HTMLElement;
       const bounds = container.getBoundingClientRect();
       let x = parseFloat(cursor[0]);
       let y = parseFloat(cursor[1]);
@@ -252,8 +252,8 @@ const Application = (props:any) => {
       setWindow({
         display: undefined,
         position: window.position,
-        height: (y <= 0 || y >= bounds.height-62) && heightCondition()?(bounds.height - window.top - 64):(heightCondition()?heightLimit(params):window.height),
-        width: (x <= 0 || x >= bounds.width-6) && (widthCondition()&&!leftCondition())?(bounds.width - window.left - 4):(widthCondition()?widthLimit(params):window.width),
+        height: (y <= 0 || y >= bounds.height-62) && heightCondition()?(bounds.height - toNumber(window.top) - 66):(heightCondition()?heightLimit(params):window.height),
+        width: (x <= 0 || x >= bounds.width-6) && (widthCondition()&&!leftCondition())?(bounds.width - toNumber(window.left) - 4):(widthCondition()?widthLimit(params):window.width),
         top: window.top,
         left: (x <= 0 || x >= bounds.width-6) && leftCondition()?2:(leftCondition()?leftLimit(params):window.left),
         zIndex: props.layer - 1,
@@ -268,7 +268,7 @@ const Application = (props:any) => {
   const moveManager = useDrag((params)=>{ //위치 조절
     props.setFocus(props.name);
     if(!isFullScreen) {
-      const container = document.getElementById("display") as HTMLElement;
+      const container = document.getElementById("main") as HTMLElement;
       const bounds = container.getBoundingClientRect();
 
       let x = parseFloat(cursor[0]);
