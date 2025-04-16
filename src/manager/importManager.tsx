@@ -2,7 +2,7 @@ import {Suspense, lazy} from "react";
 import {TaskType} from "@/modules/typeModule.tsx";
 import DisplaySetup from "@/applications/utility/displaySetup.tsx";
 const Discover = lazy(()=> import("@/applications/System/discover.tsx"));
-const Terminal =  lazy(()=> import("@/applications/Terminal.tsx"));
+const Terminal =  lazy(()=> import("@/applications/terminal.tsx"));
 const Settings = lazy(()=> import("@/applications/settings.tsx"));
 //Application Import 형식 예시
 /*
