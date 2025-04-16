@@ -7,6 +7,7 @@ import {DisplayDriver} from "@/drivers/displayDriver.tsx";
 const Application = lazy(()=> import('../applications/application.tsx'));
 
 
+
 const TaskBar = styled.footer`
     position: absolute;
     bottom: 0;
@@ -67,19 +68,9 @@ const WindowManager = () => {
   const [backUpFocus, setBackUpFocus] = useState(focus);
   const [tabDownInterrupt, setTabDownInterrupt] = useState("empty");
 
-  useEffect(() => {
-    if(focus!=="Observer"){
-      setStartOption(false);
-    }
-  },[focus])
-  useEffect(()=>{ //초기 기본 설정
-    setTimeout(()=>{ //Discover 실행
-      addTask("discover")
-    }, 200)
-
-    const container:HTMLElement = document.getElementById("main") as HTMLElement; // 화면 기준을 컨테이너로 설정
-    cursor = document.getElementById("cursor"); // 커서 불러오기
-    window.addEventListener("resize", function() {
+  //함수 선언
+  let resizeObserver = new ResizeObserver(entries => {
+    for (let entry of entries) {
       console.log("resize");
       document.removeEventListener("mousemove", (event:MouseEvent) => {
         let x = event.clientX - bounds.x;
@@ -109,7 +100,24 @@ const WindowManager = () => {
         setMouseBeacon([event.clientX, event.clientY]);
         setCursorVec([`${x}`,`${y}`]);
       });
-    })
+    }
+  });
+  //-----
+
+  useEffect(() => {
+    if(focus!=="Observer"){
+      setStartOption(false);
+    }
+  },[focus])
+
+  useEffect(()=>{ //초기 기본 설정
+    setTimeout(()=>{ //Discover 실행
+      addTask("discover")
+    }, 200)
+
+    const container:HTMLElement = document.getElementById("main") as HTMLElement; // 화면 기준을 컨테이너로 설정
+    cursor = document.getElementById("cursor"); // 커서 불러오기
+    resizeObserver.observe(container);
     // 컨테이너의 위치 및 크기
     const bounds = container.getBoundingClientRect();
     document.addEventListener("mousemove", (event:MouseEvent) => {

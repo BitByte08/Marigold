@@ -1,6 +1,6 @@
 import WindowManager from '../manager/windowManager.tsx';
 import {DisplayDriver} from "@/drivers/displayDriver.tsx";
-import DisplayManager from "@/manager/displayManager.tsx";
+import {DisplayManager} from "@/manager/displayManager.tsx";
 
 
 
