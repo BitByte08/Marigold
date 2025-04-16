@@ -197,7 +197,10 @@ const Application = (props:any) => {
   }, [isFullScreen]);
 
   const Corner = () => {
-    const [x, y] = props.mouseBeacon;
+    const container:HTMLElement = document.getElementById("main") as HTMLElement;
+    const bounds = container.getBoundingClientRect();
+    const x = props.mouseBeacon[0] - bounds.x;
+    const y = props.mouseBeacon[1] - bounds.y;
     const { left, top, width, height } = window;
 
     const nearRight = x >= toNumber(left) + toNumber(width) - 10;
@@ -252,8 +255,8 @@ const Application = (props:any) => {
       setWindow({
         display: undefined,
         position: window.position,
-        height: (y <= 0 || y >= bounds.height-62) && heightCondition()?(bounds.height - toNumber(window.top) - 66):(heightCondition()?heightLimit(params):window.height),
-        width: (x <= 0 || x >= bounds.width-6) && (widthCondition()&&!leftCondition())?(bounds.width - toNumber(window.left) - 4):(widthCondition()?widthLimit(params):window.width),
+        height: ((y <= 0 || y >= bounds.height-62) && heightCondition())?(bounds.height - toNumber(window.top) - 66):(heightCondition()?heightLimit(params):window.height),
+        width: ((x <= 0 || x >= bounds.width-6) && (widthCondition()&&!leftCondition()))?(bounds.width - toNumber(window.left) - 4):(widthCondition()?widthLimit(params):window.width),
         top: window.top,
         left: (x <= 0 || x >= bounds.width-6) && leftCondition()?2:(leftCondition()?leftLimit(params):window.left),
         zIndex: props.layer - 1,
@@ -281,7 +284,7 @@ const Application = (props:any) => {
         left: x <= 0 || x >= bounds.width - 5?
           window.left:
           window.left as unknown as number + params.offset[0] - beforeMoveParams[0],
-        top: y <= 0 || y >= bounds.height - 55?
+        top: y <= 0 || y >= bounds.height - 66?
           window.top:
           window.top as unknown as number + params.offset[1] - beforeMoveParams[1],
         zIndex: props.layer - 1,

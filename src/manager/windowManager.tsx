@@ -91,7 +91,7 @@ const WindowManager = () => {
         let y = event.clientY - bounds.y;
         // 컨테이너 내부에만 커서를 제한
         x = Math.max(0, Math.min(bounds.width - 5, x));
-        y = Math.max(0, Math.min(bounds.height - 5 , y));
+        y = Math.max(0, Math.min(bounds.height - 65 , y));
 
         cursor.style.left = `${x}px`;
         cursor.style.top = `${y}px`;
