@@ -1,6 +1,6 @@
 import {useEffect, useState, Suspense, lazy} from 'react';
 import styled from "styled-components";
-import Observer from "../applications/utility/Observer.tsx";
+import Observer from "../applications/utility/observer.tsx";
 import {useProcessManager} from "./processManager.tsx";
 import {TaskType} from "../modules/typeModule.tsx";
 import {DisplayDriver} from "@/drivers/displayDriver.tsx";
@@ -70,7 +70,6 @@ const WindowManager = () => {
 
   //함수 선언
   let resizeObserver = new ResizeObserver(entries => {
-    for (let entry of entries) {
       console.log("resize");
       document.removeEventListener("mousemove", (event:MouseEvent) => {
         let x = event.clientX - bounds.x;
@@ -100,7 +99,7 @@ const WindowManager = () => {
         setMouseBeacon([event.clientX, event.clientY]);
         setCursorVec([`${x}`,`${y}`]);
       });
-    }
+
   });
   //-----
 
