@@ -1,5 +1,6 @@
 import {Suspense, lazy} from "react";
 import {TaskType} from "@/modules/typeModule.tsx";
+import DisplaySetup from "@/applications/utility/displaySetup.tsx";
 const Discover = lazy(()=> import("@/applications/System/discover.tsx"));
 const Terminal =  lazy(()=> import("@/applications/Terminal.tsx"));
 const Settings = lazy(()=> import("@/applications/settings.tsx"));
@@ -48,7 +49,18 @@ const Apps:TaskType[] =
           "minWidth" : 200,
           "minHeight" : 150
         }
+      },{
+      "component": <Suspense fallback={null}><DisplaySetup/></Suspense>,
+      "type": "App",
+      "id": 2241,
+      "name": "DisplaySetup",
+      "layer": undefined,
+      "appSetup":{
+        "Image" : "default",
+        "minWidth" : 200,
+        "minHeight" : 150
       }
+    }
     ]
 
 export {Apps}
