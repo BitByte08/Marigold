@@ -6,6 +6,7 @@ import styled from "styled-components";
 const Window = styled.article`
     border: 1px solid #575757;
     border-radius: 5px;
+    transition: left top width height ease-in-out 10ms;
 `
 const WindowHeader = styled.header`
     background-color: #3A3A3A;
