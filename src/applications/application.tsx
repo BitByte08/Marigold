@@ -91,14 +91,15 @@ const Application = (props:any) => {
   }
   const [window, setWindow] = useState<React.CSSProperties>(windowProps);//창 Props
   const [backupWindow, setBackupWindow] = useState<React.CSSProperties>(window);//창 최대화 전 Props 백업
-  const [cursor, setCursor] = useState<string[]>(props.cursorVec);//보정 후 커서 위치
-  const [beforeSizeParams, setBeforeSizeParams] = useState<number[]>([0,0]);//이전 useDrag params 저장(size)
-  const [beforeMoveParams, setBeforeMoveParams] = useState<number[]>([0,0]);//이전 useDrag params 저장(move)
+  const [cursor, setCursor] = useState<number[]>(props.cursorVec);//보정 후 커서 위치
+  const [beforeSizeParams, setBeforeSizeParams] = useState<number[]>([0.0,0.0]);//이전 useDrag params 저장(size)
+  const [beforeMoveParams, setBeforeMoveParams] = useState<number[]>(props.cursorVec);//이전 useDrag params 저장(move)
   const [isFirst, setIsFirst] = useState<boolean>(true);//첫 클릭 여부
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);//창 최대 여부
   const [isMinimized, setIsMinimized] = useState<boolean>(false);//창 최소화 여부
 
   useEffect(() => { //cursorVec 동기화
+    setBeforeMoveParams(cursor);
     setCursor(props.cursorVec);
   }, [props.cursorVec]);
   useEffect(()=>{ //창 Props 수정될 시 Focus
@@ -199,8 +200,8 @@ const Application = (props:any) => {
   const Corner = () => {
     const container:HTMLElement = document.getElementById("main") as HTMLElement;
     const bounds = container.getBoundingClientRect();
-    const x = props.mouseBeacon[0] - bounds.x;
-    const y = props.mouseBeacon[1] - bounds.y;
+    const x = props.cursorVec[0] - bounds.x;
+    const y = props.cursorVec[1] - bounds.y;
     const { left, top, width, height } = window;
 
     const nearRight = x >= toNumber(left) + toNumber(width) - 10;
@@ -249,8 +250,8 @@ const Application = (props:any) => {
     if(isFirst && !isFullScreen && (heightCondition() || widthCondition() || leftCondition())) {
       const container = document.getElementById("main") as HTMLElement;
       const bounds = container.getBoundingClientRect();
-      let x = parseFloat(cursor[0]);
-      let y = parseFloat(cursor[1]);
+      let x = cursor[0];
+      let y = cursor[1];
       console.log(y, bounds.height);
       setWindow({
         display: undefined,
@@ -273,26 +274,19 @@ const Application = (props:any) => {
     if(!isFullScreen) {
       const container = document.getElementById("main") as HTMLElement;
       const bounds = container.getBoundingClientRect();
-
-      let x = parseFloat(cursor[0]);
-      let y = parseFloat(cursor[1]);
+      let x = cursor[0]; let y = cursor[1];
       setWindow({
         display: undefined,
         position: window.position,
         height: window.height,
         width: window.width,
-        left: x <= 0 || x >= bounds.width - 5?
-          window.left:
-          window.left as unknown as number + params.offset[0] - beforeMoveParams[0],
-        top: y <= 0 || y >= bounds.height - 66?
-          window.top:
-          window.top as unknown as number + params.offset[1] - beforeMoveParams[1],
+        left: window.left as unknown as number + (x - beforeMoveParams[0]),
+        top: window.top as unknown as number + (y - beforeMoveParams[1]),
         zIndex: props.layer - 1,
         backgroundColor: window.backgroundColor,
         filter: "dropShadow(gray 0px 0px 15px)",
       })
     }
-    setBeforeMoveParams(params.offset);
   })
   if(props.type==="App") {
     return (

@@ -59,8 +59,7 @@ const WindowManager = () => {
   }
   const taskStyle = { margin: "0.25rem" };
   let cursor:any = null;
-  const [cursorVec, setCursorVec] = useState<string[]>(["0","0"]);  //보정 후 커서 위치
-  const [mouseBeacon, setMouseBeacon] = useState<number[]>([0,0]); //마우스 절대 위치
+  const [cursorVec, setCursorVec] = useState<number[]>([0.0,0.0]);  //보정 후 커서 위치
   const [layer, setLayer] = useState<number>(1);  //최대 레이어
   const [focus, setFocus] = useState<string>("Discover"); //최대 레이어를 사용중인 애플리케이션
   const [taskList, addTask, removeTask] = useProcessManager();
@@ -81,8 +80,7 @@ const WindowManager = () => {
         cursor.style.left = `${x}px`;
         cursor.style.top = `${y}px`;
 
-        setMouseBeacon([event.clientX, event.clientY]);
-        setCursorVec([`${x}`,`${y}`]);
+        setCursorVec([x,y]);
       });
       const container:HTMLElement = document.getElementById("main") as HTMLElement;
       const bounds = container.getBoundingClientRect();
@@ -96,8 +94,7 @@ const WindowManager = () => {
         cursor.style.left = `${x}px`;
         cursor.style.top = `${y}px`;
 
-        setMouseBeacon([event.clientX, event.clientY]);
-        setCursorVec([`${x}`,`${y}`]);
+        setCursorVec([x,y]);
       });
 
   });
@@ -128,9 +125,7 @@ const WindowManager = () => {
 
       cursor.style.left = `${x}px`;
       cursor.style.top = `${y}px`;
-
-      setMouseBeacon([event.clientX, event.clientY]);
-      setCursorVec([`${x}`,`${y}`]);
+      setCursorVec([x,y]);
     });
   },[])
 
@@ -158,7 +153,6 @@ const WindowManager = () => {
                                  setTabDownInterrupt={setTabDownInterrupt}
                                  removeTask={removeTask}
                                  removeCompnent={task}
-                                 mouseBeacon={mouseBeacon}
                     >{task.component}</Application>
                   )
                 })
