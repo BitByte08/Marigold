@@ -198,12 +198,9 @@ const Application = (props:any) => {
   }, [isFullScreen]);
 
   const Corner = () => {
-    const container:HTMLElement = document.getElementById("main") as HTMLElement;
-    const bounds = container.getBoundingClientRect();
-    const x = props.cursorVec[0] - bounds.x;
-    const y = props.cursorVec[1] - bounds.y;
+    const x = props.cursorVec[0];
+    const y = props.cursorVec[1];
     const { left, top, width, height } = window;
-
     const nearRight = x >= toNumber(left) + toNumber(width) - 10;
     const nearLeft = x <= toNumber(left) + 10;
     const nearBottom = y >= toNumber(top) + toNumber(height) - 10;
@@ -223,43 +220,40 @@ const Application = (props:any) => {
     const [, nearLeft, nearBottom] = Corner();
     return ((nearLeft && nearBottom) || nearLeft)
   }
-  const widthLimit = (params:any) => { //가로 최소 크기 조건문
+  const widthLimit = () => { //가로 최소 크기 조건문
     const [nearRight, , ] = Corner();
     if (window.width as unknown as number >=props.appSetup.minWidth){
       if (nearRight) {
-        return toNumber(window.width) + params.offset[0] - beforeSizeParams[0];
+        return toNumber(window.width) + cursor[0] - beforeMoveParams[0];
       }else{
-        return toNumber(window.width) - params.offset[0] + beforeSizeParams[0];
+        return toNumber(window.width) - cursor[0] + beforeMoveParams[0];
       }
     }
     return props.appSetup.minWidth;
   }
-  const heightLimit = (params:any) => { //세로 최소 크기 조건문
+  const heightLimit = () => { //세로 최소 크기 조건문
     if (window.height as unknown as number >=props.appSetup.minHeight){
-      return window.height + params.offset[1] - beforeSizeParams[1];
+      return toNumber(window.height) + cursor[1] - beforeMoveParams[1];
     }
     return props.appSetup.minHeight;
   }
-  const leftLimit = (params:any) => { //가로 최소 크기 조건문
+  const leftLimit = () => { //가로 최소 크기 조건문
     if (window.width as unknown as number >=props.appSetup.minWidth){
-      return window.left + params.offset[0] - beforeSizeParams[0];
+      return toNumber(window.left) + cursor[0] - beforeMoveParams[0];
     }
     return window.left;
   }
-  const sizeManager = useDrag((params)=>{ //size 조절
+  const sizeManager = useDrag((params)=>{
+    console.log((heightCondition() || widthCondition() || leftCondition()))//size 조절
     if(isFirst && !isFullScreen && (heightCondition() || widthCondition() || leftCondition())) {
       const container = document.getElementById("main") as HTMLElement;
-      const bounds = container.getBoundingClientRect();
-      let x = cursor[0];
-      let y = cursor[1];
-      console.log(y, bounds.height);
       setWindow({
         display: undefined,
         position: window.position,
-        height: ((y <= 0 || y >= bounds.height-62) && heightCondition())?(bounds.height - toNumber(window.top) - 66):(heightCondition()?heightLimit(params):window.height),
-        width: ((x <= 0 || x >= bounds.width-6) && (widthCondition()&&!leftCondition()))?(bounds.width - toNumber(window.left) - 4):(widthCondition()?widthLimit(params):window.width),
+        height: heightCondition()?heightLimit():window.height,
+        width: widthCondition()?widthLimit():window.width,
         top: window.top,
-        left: (x <= 0 || x >= bounds.width-6) && leftCondition()?2:(leftCondition()?leftLimit(params):window.left),
+        left: leftCondition()?leftLimit():window.left,
         zIndex: props.layer - 1,
         backgroundColor: window.backgroundColor,
         filter: "dropShadow(gray 0px 0px 15px)"
